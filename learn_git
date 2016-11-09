@@ -103,7 +103,7 @@ $ git remote add origin git@gihub.com:******/learngit.git
 	在github创建repository，关联本地的learngit
 
 $ git push -u origin master 
-	把本地库的内容首次推送到远程(参数-u，首次推送,方便以后的推送与抓取)
+	把本地库的内容首次推送到远程(参数-u，首次推送,方便以后)
 
 $ git add *****
 $ git commit -m "*****"
