@@ -1,0 +1,10 @@
+[# **sublime**]
+
+# markdown
+
+>preference - package settings - markdown editing
+"color_scheme": "Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme",
+>preference - settings user
+"color_scheme": "Packages/Material Theme/schemes/Material-Theme-Darker.tmTheme",
+>preference - key bindings - user
+{"keys":["ctrl+p"], "command": "markdown_preview", "args": { "target": "browser"} 

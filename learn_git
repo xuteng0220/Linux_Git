@@ -1,0 +1,358 @@
+$ pwd
+$ cd file_path
+	$ cd ~ 到主目录
+$ mkdir file_name
+
+#account's default identity
+$ git config --global user.name "xuteng"
+$ git config --global user.email "xuteng0220@gmail.com"
+
+
+$ git init  
+	把当前目录变成git可以管理的仓库，这个目录默认是隐藏的，用ls -ah命令就可以看见
+
+
+添加文件到git仓库，分两步：
+$ git add readme.txt
+	git add把文件添加进去，实际上就是把文件修改添加到暂存区;
+$ git commit -m "wrote a readme file"
+	git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+    -m "wrote a readme file"本次提交(改动的)说明性文字
+
+    $ git add file1.txt
+    $ git add file2.txt file3.txt
+    $ git commit -m "add 3 files"
+
+$ git status
+	显示仓库当前的状态
+$ git diff readme.txt    
+	查看上一次具体修改的内容
+
+提交修改和提交新文件一样
+$ git add *****
+	第一步添加修改(在执行第二步git commit之前，运行git status看看当前仓库的状态)
+$ git commit -m "*******"
+	第二步提交(提交后，再用git status命令看看仓库的当前状态)
+
+
+$ git log
+	查看历史记录
+$ git log --pretty=oneline
+	查看历史，显示效果不同
+
+
+$ git reset --hard HEAD^   
+	退回到上一个版本,快速回退是因为git在内部有个指向该版本的指针
+	HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，往上100个版本为HEAD~100
+
+$ cat readme.txt   
+	查看readme.txt的内容
+
+$ git reset --hard commit_id 
+	回到特定id版本($ git log  找到版本号)
+
+$ git reflog    
+	记录每一次命令，当退回原版本，又想回到刚才的本版时，可查找commit id
+
+工作区
+	创建、修改文件存储的地方
+版本库（.git）
+	1.stage暂存区
+		$ git add
+			将文件修改添加到暂存区
+	2.master分支(以及指向master的指针HEAD)
+		$ git commit -m "******"
+			将暂存区的内容提交到分支
+
+git diff HEAD -- readme.txt
+	查看工作区文件和版本库里面最新版本的区别
+
+
+及时修正
+$ git checkout -- readme.txt
+	1.修改了工作区的文件，未$ git add，未到暂存区。该命令将工作区的修改撤销
+	2.$ git add到暂存区，未$ git commit。又修改了工作区文件。该命令使回到git add后的暂存区
+
+$ git reset HEAD readme.txt
+$ git checkout -- readme.txt
+	对工作区的文件修改，又$ git add添加。命令1把提交到暂存区的修改撤销，回到工作区,命令2把工作区的修改撤销
+
+$ git reset --hard commit_id
+$ git reset HEAD readme.txt
+$ git checkout -- readme.txt
+	对修改$ git commit后，命令1退回到上一个版本。再执行命令2、3
+
+
+$ rm test.txt
+	删除工作区文件（版本库不变）test.txt
+$ git checkout -- test.txt
+	$ rm **** 从版本库提取（复制）到工作区,前提是版本库中的文件未删除
+$ git rm test.txt
+$ git commit -m "remove test.txt"
+	将版本库中的文件删除
+
+
+
+github远程仓库
+
+$ ssh-keygen -t rsa -C "xuteng0220@gmail.com"
+	创建SSH key（在用户主目录下。若在主目录下没有.ssh,id_rsa,id_rsa.puh）
+	将.ssh中的id_rsa.pub（公钥）提交到github，就能在github上托管git仓库了
+
+$ git remote add origin git@gihub.com:******/learngit.git
+	在github创建repository，关联本地的learngit
+
+$ git push -u origin master 
+	把本地库的内容首次推送到远程(参数-u，首次推送,方便以后)
+
+$ git add *****
+$ git commit -m "*****"
+$ git push origin master
+	先在本地版本库修改、提交，再推送到github
+
+
+$ git clone git@github.com:ryanxt/gitskills.git
+	gitHub，创建一个新的仓库，名字叫gitskills。勾选initialize this repository with a readme
+$ cd gitskills
+$ ls
+	查看clone下来的文件夹
+
+
+
+分支
+
+创建分支
+
+$ git checkout -b dev
+	(-b参数表示创建并切换到分支dev)
+
+$ git branch dev 
+	创建分支dev
+$ git checkout dev 
+	切换分支dev
+
+$ git checkout master
+$ git branch 
+	查看当前所在分支
+
+$ git merge dev 
+	将指定分支合并到当前分支上（首先要$ git checkout 当前分支名）
+
+$ git branch -d dev
+	删除分支dev
+
+git鼓励使用分支完成某个任务，合并后再删掉分支，这和直接在master分支上工作效果是一样的，但过程更安全
+
+
+
+当git无法自动合并分支时，就必须首先解决冲突
+
+$ git checkout -b feature1
+	$ git add file1
+	$ git commit -m "*****"
+		对file1做修改后，添加、提交
+$ git checkout master
+	$ git add file1
+	$ git commit -m "******"
+		对file1做不同的修改
+$ git merge feature1
+	产生冲突
+$ git status
+	$ cat file1
+		查看文件内容，显示冲突部分。
+		对file1修改成相同的以后，再提交
+$ git log --graph --pretty=oneline --abbrev-commit
+	查看分支合并的情况
+$ git branch -d feature1
+
+
+
+分支合并,非fast forward模式
+$ git checkout -b feature2
+	$ git add file1
+	$ git commit -m "*****"
+$ git checkout master
+$ git merge --no-ff -m "merge with no-ff" feature2
+	以recursive的方式合并分支，因为在Fast forward模式下，删除分支后，会丢掉分支信息。--no-ff参数，以用普通模式合并，合并后的历史有分支，而fast forward合并就看不出来曾经做过合并
+$ git log --graph --pretty=oneline --abbrev-commit
+
+分支策略
+master稳定，用来发布版本，不在上面直接修改。修改在dev(develop)上，每个开发参与者又从dev衍生出的分支上修改
+
+
+
+临时修复bug
+
+$ git stash
+	在dev分支上，将未提交的工作储存起来（未$ git add ***   $ git commit -m "*****"以前）
+	$ git status
+
+$ git checkout master
+	切换到需要修复的分支上
+$ git checkout -b fix_bug 
+	创建修复bug分支
+$ git add ***
+$ git commit -m "***"
+$ git checkout master
+$ git merge --no-ff -m "bug fixed" fix_bug
+$ git branch -d fix_bug
+
+$ git checkout dev
+$ git stash list 
+	查看工作现场
+$ git stash apply 
+	恢复工作现场，stash内容不删除
+$ git stash drop 
+	删除stash内容
+
+$ git stash pop
+	恢复最近的工作现场，同时删除最近一次stash内容
+$ git stash apply stash@{*} 
+	多次stash，恢复的时候，先用git stash list查看，然后恢复指定的stash，*表示数字，即想要恢复的stash位置（多次stash后要删除stash出现问题？？？）
+
+
+强制删除分支
+$ git checkout -b feature3
+$ git add *****
+$ git commit -m "*****"
+$ git checkout dev
+$ git branch -D feature3
+	删除一个没有被合并过的分支feature3，一般删除（参数 -d）无法完成，需要强制删除(参数 -D)
+
+
+
+$ git remote 
+	查看远程库
+$ git remote -v 
+	显示远程库更多详细信息
+
+$ git push origin master 
+	主分支master需时刻与远程同步
+$ git push origin dev 
+	开发分支也要远程推送，bug和feature分支视情况而定
+
+$ git clone git@git@github.com:ryanxt/learngit.git 
+	协作开发者（另一台电脑，或同一台电脑中不同的目录下）从远程克隆分支，得到的是master分支
+$ git checkout -b dev origin/dev 
+	创建本地dev分支
+$ git push origin dev 
+	推送dev分支
+
+$ git branch --set-upstream dev origin/dev 
+	若未设置本地dev与远程origin/dev连接，则git pull不成功。需链接本地与远程的分支。之后，git push origin dev
+$ git pull
+$ git add ***
+$ git commit -m "***"
+$ git push origin dev
+	当git push origin dev不成功时，由于滞后于协作开发者，需将他的提交从origin/dev抓取，在本地合并，解决冲突，再推送到远程
+
+
+
+
+标签，是版本库的一个快照，是一个指向某个commit的指针
+
+$ git branch
+$ git checkout branch_name
+	切换到需要打标签的分支上
+$ git tag v1.0
+	打标签v1.0，最后一次commit
+$ git tag
+	查看所有标签。标签是以字母排列的
+$ git log --pretty=online --abbrev-commit
+$ git tag v1.1 commit_id
+	在某个commit上打标签
+$ git show tag_name
+	查看某个标签的具体信息
+$ git tag v1.2 -m "******" commit_id
+	创建带说明的标签
+
+	$ git tag -s v1.3 -m "signed with code" commit_id
+		创建私钥签名标签，私钥采用PGP前面，需安装GnuPG
+
+		
+
+$ git tag -d v1.0
+	删除本地标签（且未推送到远程）
+$ git push prigin v1.0
+	推送标签
+$ git push origin --tags
+	推送所有未推送标签
+
+$ git tag -d v1.1
+$ git push origin :refs/tags/v1.1
+	先删除本地，再删除远程标签
+
+
+
+使用Github
+fork 
+	fork github上别人的repository，可编辑、修改、开发
+pull request
+	将自己的修改提交给repository的创建者
+
+
+
+
+Git配置
+$ git config --global color.ui true
+	显示颜色
+
+
+
+
+
+
+忽略特殊文件
+$ git status
+    显示有untracked files，让它不显示，需在工作区配置.gitignore文件，写入需忽略的文件名
+	配置.gitignore文件https://github.com/github/gitignore
+	需将.gitignore提交（add,commit）
+	
+	
+设置命令别名
+$ git config --global alias.st status
+	$ git st
+	$ git status
+$ git config --global alias.co checkout
+$ git config --global alias.ci commit
+$ git config --global alias.br branch
+$ git config --global alias.unstage 'reset HEAD'
+$ git config --global alias.last 'log -1'
+	--global 全局参数，对本电脑所有Git仓库有效。若无--global参数，则别名只对当前仓库有效
+
+每个仓库有一个Git配置文件，在.git/config中
+$ cat .git/config
+	查看配置文件。删除别名，删除配置文件中对应的行即可
+
+当前用户的Git配置文件，在主目录下的.gitconfig（隐藏文件）中
+
+
+
+
+搭建Git服务器
+1.Linux机器，Ubuntu
+2.sudo权限的用户
+
+	$ sudo apt-get install git
+		安装git
+
+	$ sudo adduser git
+		创建一个git用户
+
+	把所有公钥（需要登录的用户的id_rsa.pub文件）导入到/home/git/.ssh/authorized_keys文件里，一行一个.
+
+	$ sudo git init --bare sample.git
+		假定是/srv/sample.git，在/srv目录下输入
+
+	$ sudo chown -R git:git sample.git
+                把owner改为git
+
+	编辑/etc/passwd文件,找到类似下面的一行：
+	git:x:1001:1001:,,,:/home/git:/bin/bash
+	改为：
+	git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell
+		禁用shell登录
+
+	$ git clone git@server:/srv/sample.git
+		克隆远程仓库到本地
+
