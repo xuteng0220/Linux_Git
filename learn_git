@@ -12,7 +12,7 @@ $ git init
 	把当前目录变成git可以管理的仓库，这个目录默认是隐藏的，用ls -ah命令就可以看见
 
 
-添加文件到git仓库，分两步：
+添加文件到git仓库，分两步（修改后提交与之相同，也是以下两部）：
 $ git add readme.txt
 	git add把文件添加进去，实际上就是把文件修改添加到暂存区;
 $ git commit -m "wrote a readme file"
@@ -93,13 +93,31 @@ $ git commit -m "remove test.txt"
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 github远程仓库
 
-$ ssh-keygen -t rsa -C "xuteng0220@gmail.com"
+$ ssh-keygen -t rsa -b 4096 -C "xuteng0220@gmail.com"
 	创建SSH key（在用户主目录下。若在主目录下没有.ssh,id_rsa,id_rsa.puh）
 	将.ssh中的id_rsa.pub（公钥）提交到github，就能在github上托管git仓库了
 
-$ git remote add origin git@gihub.com:******/learngit.git
+$ cd filePath
+$ git init
+$ git remote add origin git@gihub.com:xuteng0220/fileName.git
 	在github创建repository，关联本地的learngit
 
 $ git push -u origin master 
@@ -107,15 +125,50 @@ $ git push -u origin master
 
 $ git add *****
 $ git commit -m "*****"
-$ git push origin master
+$ git push origin master 
 	先在本地版本库修改、提交，再推送到github
 
 
-$ git clone git@github.com:ryanxt/gitskills.git
+$ git clone git@github.com:xuteng0220/fileName.git
 	gitHub，创建一个新的仓库，名字叫gitskills。勾选initialize this repository with a readme
 $ cd gitskills
 $ ls
 	查看clone下来的文件夹
+
+
+
+
+git pull --rebase origin master
+	github远程仓库原有readme文件，本地无。先执行上述代码，后执行git push -u origin master
+
+git revert commit_id -m "******"
+	与git reset ***** 不同
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
