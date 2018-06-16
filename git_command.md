@@ -29,7 +29,8 @@ $ cd dirPath
 $ mkdir fileName
 $ open fileName
 $ rm fileName
-$ mv fileName dirPath
+$ mv fileName dirPath  //移动文件到另一个文件夹
+$ mv fileName newFileName  //重命名文件
 ```
 
 >cd /d/xuteng  
