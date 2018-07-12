@@ -297,12 +297,22 @@ $ git status
 	// 查看当前（冲突）状态
 $ cat file1
 	// 查看文件内容，显示冲突部分。
-	对file1修改成相同的以后，再提交
+```
+
+### 手动修改成相同文件，解决冲突
+打开冲突文件，`<<<<<<<`，`=======`，`>>>>>>>`标记出了不同分支的内容。在此基础上直接修改成想要的最终结果，删除`标记符号`，修改后add，commit
+
+```
+$ git add file1
+$ git commit -m "fix conflict"
+$ git merge future1 // 是否需要这步，可以再试验一下
 $ git log --graph --pretty=oneline --abbrev-commit
 	// 查看分支合并的情况
 $ git branch -d feature1
 	// 删除feature1分支
 ```
+
+
 
 
 ### 分支合并，非fast forward模式
