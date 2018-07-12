@@ -428,6 +428,7 @@ $ git status
 	
 	
 ## 设置命令别名
+```
 $ git config --global alias.st status
 	$ git st
 	$ git status
@@ -437,9 +438,10 @@ $ git config --global alias.br branch
 $ git config --global alias.unstage 'reset HEAD'
 $ git config --global alias.last 'log -1'
 	--global 全局参数，对本电脑所有Git仓库有效。若无--global参数，则别名只对当前仓库有效
+```
+每个仓库有一个Git配置文件，在.git/config中  
 
-每个仓库有一个Git配置文件，在.git/config中
-$ cat .git/config
+$ cat .git/config  
 	查看配置文件。删除别名，删除配置文件中对应的行即可
 
 当前用户的Git配置文件，在主目录下的.gitconfig（隐藏文件）中
