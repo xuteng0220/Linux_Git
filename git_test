@@ -3,3 +3,7 @@ git test
 how to learn git 
 
 something like conflict merge
+
+content above is on branch master, below is on branch dev
+
+branch dev means develop branch, codes here are semi_finished to be merged to branch master
